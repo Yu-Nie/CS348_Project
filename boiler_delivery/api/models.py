@@ -11,7 +11,7 @@ class Cart(models.Model):
 class Restaurant(models.Model):
     address = models.TextField()
     name = models.CharField(max_length=255, null=False, blank=False)
-    phone = models.PositiveBigIntegerField(null=False);
+    phone = models.BigIntegerField(null=False)
     image_url = models.TextField()
 
 

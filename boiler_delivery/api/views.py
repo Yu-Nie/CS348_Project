@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from .utils import getMenus,createMenuItem
+from .utils import getCart, getMenus, createMenuItem, signup
 
 # Create your views here.
 
 def test(request):
-    print(createMenuItem('a', 123))
+    cust_id = signup("a", "b", "c", "d")
+    getCart(cust_id)
     return (HttpResponse("sup"))
