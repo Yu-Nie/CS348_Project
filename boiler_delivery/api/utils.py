@@ -16,10 +16,22 @@ def signup(email, firstname, lastname, password, enable=False):
     
     return cust.id
 
+#  username is the same as email
+# TODO: encrypt the password
+def customerLogin(username, password):
+    cust = Customer.objects.filter(email=username)
+    if not cust:
+        return False
+
+    if cust.password == password:
+        return True
+
+    return False
+
 
 # Returns a list of menu Items of the given restaurant name 
-def getMenus(restaurant_name):
-    return MenuItem.objects.filter(restaurant__name=restaurant_name)
+def getMenus(restaurant_id):
+    return MenuItem.objects.filter(id=restaurant_id)
 
 
 # Creates a menu item for a restaurant. Default price is 0.
@@ -33,7 +45,7 @@ def createMenuItem(name, restaurant_name, price=0.0, description=''):
 
 # Returns all restaurants
 def getRestrants():
-    return Restaurant.objects().all()
+    return Restaurant.objects.all()
 
 
 # Returns the cart id of a given customer id
