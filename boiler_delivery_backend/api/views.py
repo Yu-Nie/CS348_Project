@@ -28,6 +28,9 @@ def customerLoginView(request, username=None, password=None):
     }
     return (HttpResponse(json.dumps(res, cls=DjangoJSONEncoder), content_type='application/json'))
 
+def customerSignupView():
+    return
+
 
 def getMenusView(request):
     fullpath = request.get_full_path()
