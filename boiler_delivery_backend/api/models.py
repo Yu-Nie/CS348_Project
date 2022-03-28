@@ -1,41 +1,45 @@
 from django.db import models
 
 # Create your models here.
-class Authorities(models.Model):
-    email = models.CharField(max_length=255, null=False, blank=False)
-    authorities = models.BooleanField(default=False)
-
-class Cart(models.Model):
-    totalPrice = models.FloatField()
-
-class Restaurant(models.Model):
-    address = models.TextField()
-    name = models.CharField(max_length=255, null=False, blank=False)
-    phone = models.BigIntegerField(null=False)
-    image_url = models.TextField()
-
-
-# https://docs.djangoproject.com/en/1.8/topics/auth/passwords/#django.contrib.auth.hashers.make_password
-# ^ function to encrypt password
-
 class Customer(models.Model):
+    user_Id = models.AutoField()
     email = models.CharField(max_length=255,null=False, blank=False)
     firstName = models.CharField(max_length=255,null=False, blank=False)
     lastName = models.CharField(max_length=255,null=False, blank=False)
     password = models.CharField(max_length=255,null=False, blank=False)
-    enable = models.BooleanField(default=False)
-    cartId = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    address = models.TextField()
 
 
-class MenuItem(models.Model):
+class Cart(models.Model):
+    cart_Id = models.AutoField()
+    totalPrice = models.FloatField()
+    user_Id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+
+
+class Restaurant(models.Model):
+    restaurant_Id = models.AutoField()
+    name = models.CharField(max_length=255, null=False, blank=False)
+    address = models.TextField()
+    phone = models.BigIntegerField(null=False)
+
+
+class Food(models.Model):
+    food_Id = models.AutoField()
     name = models.CharField(max_length=255,null=False, blank=False)
-    price = models.FloatField(null=False)
     description = models.TextField(null=False, blank=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    price = models.FloatField(null=False)
+    restaurant_Id = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
 
 class OrderItem(models.Model):
-    quantity = models.IntegerField(null=False)
+    item_Id = models.AutoField()
+    name = models.CharField(max_length=255,null=False, blank=False)
+    description = models.TextField(null=False, blank=True)
     price = models.FloatField(null=False)
-    menuItem_id = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
-    cart_id = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantity = models.IntegerField(null=False)
+    food_Id = models.ForeignKey(Food, on_delete=models.CASCADE)
+    cart_Id = models.ForeignKey(Cart, on_delete=models.CASCADE)
+
+
+# https://docs.djangoproject.com/en/1.8/topics/auth/passwords/#django.contrib.auth.hashers.make_password
+# ^ function to encrypt password
