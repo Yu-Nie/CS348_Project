@@ -1,6 +1,11 @@
 from django.db import models
 
 # Create your models here.
+class Cart(models.Model):
+    cart_Id = models.AutoField()
+    totalPrice = models.FloatField()
+
+
 class Customer(models.Model):
     user_Id = models.AutoField()
     email = models.CharField(max_length=255,null=False, blank=False)
@@ -8,12 +13,7 @@ class Customer(models.Model):
     lastName = models.CharField(max_length=255,null=False, blank=False)
     password = models.CharField(max_length=255,null=False, blank=False)
     address = models.TextField()
-
-
-class Cart(models.Model):
-    cart_Id = models.AutoField()
-    totalPrice = models.FloatField()
-    user_Id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    cart_Id = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
 
 class Restaurant(models.Model):
