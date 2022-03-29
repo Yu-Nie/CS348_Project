@@ -9,12 +9,13 @@ import json
 # Create your views here.
 
 def test(request):
-    cust_id = signup("a", "b", "c", "d")
-    getCart(cust_id)
+    # cust_id = signup("a", "b", "c", "d")
+    # getCart(cust_id)
     return (HttpResponse("Sup, this is the defualt page"))
 
 
 def customerLoginView(request, username=None, password=None):
+    print("login request received\n")
     username = request.GET.get('username')
     password = request.GET.get('password')
 
@@ -27,6 +28,10 @@ def customerLoginView(request, username=None, password=None):
         "success": login_success,
     }
     return (HttpResponse(json.dumps(res, cls=DjangoJSONEncoder), content_type='application/json'))
+
+
+def customerSignupView():
+    return
 
 
 def getMenusView(request):

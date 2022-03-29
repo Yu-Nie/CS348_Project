@@ -1,4 +1,4 @@
-from .models import MenuItem, Restaurant, Customer, Cart, OrderItem
+from .models import *
 
 
 
@@ -7,7 +7,7 @@ from .models import MenuItem, Restaurant, Customer, Cart, OrderItem
 #  
 # TODO: encrypt the password
 def signup(email, firstname, lastname, password, enable=False):
-    cust = Customer.objects.get(email=email)
+    cust = Customer.objects.filter(email=email)
     if cust:
         return cust.id
 
@@ -31,15 +31,15 @@ def customerLogin(username, password):
 
 # Returns a list of menu Items of the given restaurant name 
 def getMenus(restaurant_id):
-    return MenuItem.objects.filter(id=restaurant_id)
+    return Food.objects.filter(id=restaurant_id)
 
 
 # Creates a menu item for a restaurant. Default price is 0.
-def createMenuItem(name, restaurant_name, price=0.0, description=''):
+def createFood(name, restaurant_name, price=0.0, description=''):
 
     rest, created = Restaurant.objects.get_or_create(name=restaurant_name, defaults={'phone': 0})
     #print(rest)
-    new_mi = MenuItem.objects.create(name=name, price=price, description=description, restaurant=rest)
+    new_mi = Food.objects.create(name=name, price=price, description=description, restaurant=rest)
     return new_mi.id
 
 
@@ -66,11 +66,11 @@ def checkout():
 
 # creates a new orderitem object and assigns a menu item it to a cart.
 # will return -1 if cart or menu iten does not exist.
-def addToCart(cartId, menuItemId, quantity=1, price=0.0):
-    mi_object = MenuItem.get(id=menuItemId)
+def addToCart(cartId, foodId, quantity=1, price=0.0):
+    food_object = Food.get(id=foodId)
     cart_object = Cart.get(id=cartId)
-    if not mi_object or not cart_object:
+    if not food_object or not cart_object:
         return -1
 
-    new_oi = OrderItem.objects.create(quantity=quantity, price=price, menuItem_id=mi_object, cart_id=cart_object)
+    new_oi = OrderItem.objects.create(quantity=quantity, price=price, food_id=food_object, cart_id=cart_object)
     return new_oi.id

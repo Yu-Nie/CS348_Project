@@ -1,10 +1,11 @@
 from django.urls import path, re_path
-from .views import test, customerLoginView, getMenusView, getAllRestaurants
+from .views import *
 
 urlpatterns = [
-    path('', test),
-    path('login', customerLoginView),
-    re_path(r'restaurant/[0-9]+/menu', getMenusView),
+    # path('', test),
+    path('login/', customerLoginView),
+    path('signup/', customerSignupView),
+    path('food/', getMenusView),
     path('restaurants/', getAllRestaurants),
 
 ]
