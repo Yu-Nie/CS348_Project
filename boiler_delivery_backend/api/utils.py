@@ -7,7 +7,7 @@ from .models import *
 #  
 # TODO: encrypt the password
 def signup(email, firstname, lastname, password, enable=False):
-    cust = Customer.objects.get(email=email)
+    cust = Customer.objects.filter(email=email)
     if cust:
         return cust.id
 

@@ -1,4 +1,4 @@
-const base_url = "http://egg-fried-rice.cgiajlg2cozl.us-east-2.rds.amazonaws.com/";
+const base_url = "http://127.0.0.1:8000/";
 
 export default {
     base_url: base_url,
