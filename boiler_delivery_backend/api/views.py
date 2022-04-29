@@ -71,11 +71,10 @@ def customerSignupView(request):
 
 
 def restaurantView(request):
-    return render(request, "restaurant.html")
+    return render(request, "restaurant.html", {"authenticated": request.user.is_authenticated })
 
 
 def addRestaurantView(request):
-    
     if request.user.is_authenticated:
         if request.method == "POST":
             address = request.POST.get("address")
@@ -89,17 +88,11 @@ def addRestaurantView(request):
             return HttpResponse("Restaurant Registered!")
             
         else:
-            new_post = request.POST.copy()
-            new_post['owner_Id'] = request.user
-            #print(new_post)
-
-            form = AddRestaurantForm(new_post)
+            form = AddRestaurantForm()
             return render(request, "addRestaurant.html", {"form":form})
         
     else:
-        print("not logged in!")
-        return (HttpResponse("sup"))
-
+        return render(request, "requestlogin.html")
 
 
 

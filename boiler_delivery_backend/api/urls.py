@@ -4,12 +4,12 @@ from .views import *
 
 
 urlpatterns = [
-    path('', mainPageView),
+    path('', mainPageView, name = 'main'),
     path('customer', customerView, name = 'customer'),
     path('usersignup/', customerSignupView),
     path('food/', getMenusView),
     path('cart/', getCartView),
-    #path('restaurant/', restaurantView),
+    path('restaurant/', restaurantView),
     #path('restaurant/login', restaurantView),
     path('restaurant/addRestaurant', addRestaurantView),
 

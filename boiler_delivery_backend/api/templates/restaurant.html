@@ -118,8 +118,12 @@ hr {
 
 <h2>Welcome Restaurant Owner!</h2>
 
-<button onclick="location.href = './restaurant/login'" style="width:auto;">log in</button>
-<button onclick="location.href = './addRestaurant'" style="width:auto;">sign up</button>
+{% if authenticated %}
+<button onclick="location.href = './addRestaurant'" style="width:auto;">Add Restaurant</button>
+{% else %}
+<a>Please login to continue.<br></a>
+<button onclick="location.href = '/login'" style="width:auto;">Login</button>
+{% endif %}
 
 </body>
 </html>
