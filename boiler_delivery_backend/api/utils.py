@@ -1,4 +1,6 @@
+from tkinter.messagebox import NO
 from scipy.fftpack import cs_diff
+from sympy import re
 from .models import *
 
 
@@ -35,13 +37,15 @@ def getCustomer(username):
     cust = Customer.objects.filter(email=username)
     if not cust:
         return None
-        
+
     return cust[0]
 
 
-# Returns a list of menu Items of the given restaurant name 
+# Returns a list of menu Items of the given restaurant object
 def getMenus(restaurant_id):
-    return Food.objects.filter(id=restaurant_id)
+    menu = Food.objects.filter(restaurant_Id=restaurant_id)
+    print("menu:", menu)
+    return menu[0] if menu else None
 
 
 # Creates a menu item for a restaurant. Default price is 0.
@@ -56,6 +60,18 @@ def createFood(name, restaurant_name, price=0.0, description=''):
 # Returns all restaurants
 def getRestrants():
     return Restaurant.objects.all()
+
+# Returns all restaurants owned by a given Customer object
+def getRestrantsOwner(cust):
+    rest_obj = Restaurant.objects.filter(owner=cust)
+    return rest_obj
+
+# Returns restaurant with given id
+def getRestrant(rest_id):
+    rest_obj = Restaurant.objects.filter(restaurant_Id=rest_id)
+    if rest_obj:
+        return rest_obj[0]
+    return None
 
 
 # Returns the content of the cart a given customer username (email)

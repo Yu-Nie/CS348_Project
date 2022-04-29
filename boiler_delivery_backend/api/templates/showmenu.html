@@ -1,0 +1,12 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Menu
+{% endblock %}
+
+{% block content %}
+    {% for obj in menu_objects %}
+	<p><a href="/{{obj.id}}"><img src={{obj.image_url}}> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a></p>
+    {% endfor %}
+{% endblock %}

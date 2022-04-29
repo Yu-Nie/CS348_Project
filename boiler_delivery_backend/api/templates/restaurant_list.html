@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ALL RESTAURANT</title>
-</head>
-<body>
-<table border="5" class="table table-hover table-bordered">
-    <thead>
-    <tr>
-        <td>restaurant_id</td>
-        <td>address</td>
-        <td>image</td>
-        <td>name</td>
-        <td>phone</td>
-    </tr>
-    </thead>
-</table>
-</body>
-</html>
+
+{% extends "base.html" %}
+
+{% block title %}
+All Restaurants
+{% endblock %}
+
+{% block content %}
+    {% for rest in restaurants %}
+	<p><a href="/{{rest.id}}"><img src={{rest.image_url}}> Name: {{rest.name}},   Address: {{rest.address}},  Phone Number: {{rest.phone}}</a></p>
+    {% endfor %}
+{% endblock %}

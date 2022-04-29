@@ -4,11 +4,11 @@ from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from .forms import SignupForm, AddRestaurantForm
 
 # Create your views here.
 from .utils import *
 from .models import *
+from .forms import *
 
 
 def test(request):
@@ -95,6 +95,44 @@ def addRestaurantView(request):
         return render(request, "requestlogin.html")
 
 
+def addFoodSelectRestView(request):
+    if request.user.is_authenticated:
+        cust = getCustomer(request.user.username)
+        rests = getRestrantsOwner(cust)
+
+        print(rests)
+        return render(request, "listownerrest.html", {"objects":rests})
+        
+    else:
+        return render(request, "requestlogin.html")
+
+
+def addFoodView(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            description = request.POST.get("description")
+            image_url = request.POST.get("image_url")
+            name = request.POST.get("name")
+            price = request.POST.get("price")
+            
+            fullpath = fullpath.split('/')
+            rest_id = int(fullpath[3])
+            rest_object = getRestrant(rest_id)
+
+            Food.objects.create(description=description, image_url=image_url, name=name, price=price, restaurant_Id=rest_object)
+
+            return HttpResponse("Restaurant Registered!")
+            
+        else:
+            form = AddFoodForm()
+            return render(request, "addFood.html", {"form":form})
+        
+    else:
+        return render(request, "requestlogin.html")
+
+
+
+
 
 def getMenusView(request):
     fullpath = request.get_full_path()
@@ -102,22 +140,24 @@ def getMenusView(request):
 
     rest_id = int(fullpath[2])
 
-    menus = getMenus(rest_id)
-    menus_serialized = serializers.serialize("json", menus)
+    rest_object = getRestrant(rest_id)
+    if not rest_object:
+        return (HttpResponse("no such restaurant"))
+    menu = getMenus(rest_object)
+    if not menu:
+        return (HttpResponse("This restaurant has no food."))
+    return render(request, "showmenu.html", {"menu_objects":menu})
 
-    return (HttpResponse(menus_serialized, content_type='application/json'))
 
 
 def getAllRestaurants(request):
-    all_rest = getRestrants()
-    all_rest_ser = serializers.serialize("json", all_rest)
-    return render(request, "restaurant_list.html");
+    return render(request, "restaurant_list.html", {"restaurants": getRestrants});
     # return (HttpResponse(all_rest_ser, content_type='application/json'))
 
 
 def getCartView(request):
     if request.user.is_authenticated:
-        print(getCart(request.user.username))
+        #print(getCart(request.user.username))
         return (HttpResponse("logged in"))
     else:
         print("not logged in!")
