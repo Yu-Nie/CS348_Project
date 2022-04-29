@@ -3,11 +3,12 @@ from django.contrib import admin
 from .views import *
 
 urlpatterns = [
-    # path('', test),
-    path('login/', customerLoginView),
-    path('signup/', customerSignupView),
+    path('', mainPageView),
+    path('customer', customerView),
+    path('customer/login/', customerLoginView),
+    path('customer/signup/', customerSignupView),
     path('food/', getMenusView),
-    path('restaurants/', getAllRestaurants),
+    path('restaurants/', restaurantView),
     path('admin/', admin.site.urls),
-    path('addRestaurant/', addRestaurantView)
+    path('addRestaurant/', addRestaurantView),
 ]
