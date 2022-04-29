@@ -3,12 +3,12 @@ from django.db import models
 
 # Create your models here.
 class Cart(models.Model):
-    cart_Id = models.IntegerField(primary_key=True, default=0)
+    cart_Id = models.BigAutoField(primary_key=True)
     totalPrice = models.FloatField()
 
 
 class Customer(models.Model):
-    user_Id = models.IntegerField(primary_key=True, default=0)
+    user_Id = models.BigAutoField(primary_key=True)
     email = models.EmailField(unique=True)
     firstName = models.CharField(max_length=255, null=False, blank=False)
     lastName = models.CharField(max_length=255, null=False, blank=False)

@@ -1,12 +1,13 @@
 from django.http import HttpResponse
-from .utils import getCart, getMenus, getRestrants, signup, customerLogin
-
+from . import models
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
-
+from django.shortcuts import render
 import json
 
 # Create your views here.
+from .utils import customerLogin
+
 
 def test(request):
     # cust_id = signup("a", "b", "c", "d")
@@ -30,8 +31,21 @@ def customerLoginView(request, username=None, password=None):
     return (HttpResponse(json.dumps(res, cls=DjangoJSONEncoder), content_type='application/json'))
 
 
-def customerSignupView():
-    return
+def customerSignupView(request):
+        if request.method == "POST":
+            first_name = request.POST.get("first")
+            last_name = request.POST.get("last")
+            email = request.POST.get("email")
+            address = request.POST.get("address")
+            password = request.POST.get("pwd")
+            cart = models.Cart(totalPrice=0.0)
+            cart.save()
+            models.Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
+                                           password=password, cart_Id = cart)
+
+            return HttpResponse("Sucess!!!")
+
+        return render(request, "signup.html")
 
 
 def getMenusView(request):
@@ -49,4 +63,7 @@ def getMenusView(request):
 def getAllRestaurants(request):
     all_rest = getRestrants()
     all_rest_ser = serializers.serialize("json", all_rest)
-    return (HttpResponse(all_rest_ser, content_type='application/json'))
+    #models.Cart.objects.getall()
+    return render(request, "restaurant_list.html");
+    #return (HttpResponse(all_rest_ser, content_type='application/json'))
+

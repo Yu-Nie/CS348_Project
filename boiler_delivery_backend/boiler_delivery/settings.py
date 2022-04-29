@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
-
+import psycopg2.extensions
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'api.apps.ApiConfig',
-
+    'rest_framework',
     "corsheaders",
 ]
 
@@ -87,6 +87,7 @@ DATABASES = {
         'PASSWORD': 'e3JILbwBIBaqv4zYJZn2',
         'HOST': 'egg-fried-rice.cgiajlg2cozl.us-east-2.rds.amazonaws.com',
         'PORT': '3306',
+
     }
 }
 
@@ -126,6 +127,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+'''STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build/static')
+]'''
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ]
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
