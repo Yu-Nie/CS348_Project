@@ -1,3 +1,4 @@
+from scipy.fftpack import cs_diff
 from .models import *
 
 
@@ -29,6 +30,15 @@ def customerLogin(username, password):
     return False
 
 
+# Returns a customer object with a given customer username / email
+def getCustomer(username):
+    cust = Customer.objects.filter(email=username)
+    if not cust:
+        return None
+        
+    return cust[0]
+
+
 # Returns a list of menu Items of the given restaurant name 
 def getMenus(restaurant_id):
     return Food.objects.filter(id=restaurant_id)
@@ -48,16 +58,24 @@ def getRestrants():
     return Restaurant.objects.all()
 
 
-# Returns the cart id of a given customer id
-def getCart(customer_id):
-    cust_obj = Customer.objects.get(id=customer_id)
+# Returns the content of the cart a given customer username (email)
+def getCart(username):
+    cust_obj = Customer.objects.filter(email=username)
     if not cust_obj:
-        print("No such customer")
         return None
     
-    cart = cust_obj.cartId
-    #print(cart.id)
-    return cart.id
+    #print(cust_obj[0])
+    cart = cust_obj[0].cart_Id
+    return cart
+
+
+# Returns a list of ordered items of a given cart object
+def getOrderItem(cart):
+    order_objects = OrderItem.objects.filter(cart_Id=cart)
+    if not order_objects:
+        return None
+    return order_objects
+
 
 
 def checkout():

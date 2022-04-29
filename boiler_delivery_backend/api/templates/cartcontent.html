@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}
+Cart Content
+{% endblock %}
+
+{% block content %}
+    {% for td in  %}
+	<p><a href="/{{td.id}}">{{td.name}}</a></p>
+    {% endfor %}
+{% endblock %}
