@@ -23,7 +23,7 @@ def mainPageView(request):
 
 
 def customerView(request):
-    return render(request, "customer.html")
+    return render(request, "customer.html", {"authenticated": request.user.is_authenticated })
 
 
 def customerLoginView(request, username=None, password=None):
@@ -85,7 +85,7 @@ def addRestaurantView(request):
             cust_obj = getCustomer(request.user.username)
             Restaurant.objects.create(address=address, image_url=image_url, name=name, phone=phone, owner=cust_obj)
 
-            return HttpResponse("Restaurant Registered!")
+            return HttpResponse("Restaurant Registered!   <button onclick=\"location.href = \'/restaurant\'\" style=\"width:auto;\">Back</button>")
             
         else:
             form = AddRestaurantForm()
@@ -115,13 +115,17 @@ def addFoodView(request):
             name = request.POST.get("name")
             price = request.POST.get("price")
             
+            fullpath = request.get_full_path()
             fullpath = fullpath.split('/')
             rest_id = int(fullpath[3])
             rest_object = getRestrant(rest_id)
 
+            if rest_object.owner != getCustomer(request.user.username):
+                return render(request, "redirectMain.html", {"message": "This is not your restaurant."})
+
             Food.objects.create(description=description, image_url=image_url, name=name, price=price, restaurant_Id=rest_object)
 
-            return HttpResponse("Restaurant Registered!")
+            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood/\'\" style=\"width:auto;\">Back</button>")
             
         else:
             form = AddFoodForm()
@@ -142,11 +146,11 @@ def getMenusView(request):
 
     rest_object = getRestrant(rest_id)
     if not rest_object:
-        return (HttpResponse("no such restaurant"))
+        return (HttpResponse("no such restaurant.  <button onclick=\"location.href = \'/restaurants\'\" style=\"width:auto;\">Back</button>"))
     menu = getMenus(rest_object)
     if not menu:
-        return (HttpResponse("This restaurant has no food."))
-    return render(request, "showmenu.html", {"menu_objects":menu})
+        return (HttpResponse("This restaurant has no food. <button onclick=\"location.href = \'/restaurants\'\" style=\"width:auto;\">Back</button>"))
+    return render(request, "showmenu.html", {"restname": rest_object.name, "menu_objects":menu})
 
 
 
@@ -155,10 +159,29 @@ def getAllRestaurants(request):
     # return (HttpResponse(all_rest_ser, content_type='application/json'))
 
 
+def addCartView(request):
+    fullpath = request.get_full_path()
+    fullpath = fullpath.split('/')
+
+    food_id = int(fullpath[2])
+    food_obj = getFood(food_id)
+
+    cart_obj = getCart(getCustomer(request.user.username).email)
+
+    ordered = OrderItem.objects.filter(food_Id=food_obj, cart_Id=cart_obj)
+    if ordered:
+        ordered[0].quantity += 1
+    else:
+        OrderItem.objects.create(name=food_obj.name, description=food_obj.description, 
+                                price=food_obj.price, quantity=1, food_Id=food_obj, cart_Id=cart_obj)
+    return (HttpResponse("Added to Cart."))
+
+
 def getCartView(request):
     if request.user.is_authenticated:
-        #print(getCart(request.user.username))
-        return (HttpResponse("logged in"))
+        cart = getCart(getCustomer(request.user.username).email)
+        ordered = getOrderItem(cart)
+        return render(request, "cart_list.html", {"ordered": ordered});
     else:
         print("not logged in!")
         return (HttpResponse("sup"))

@@ -6,7 +6,13 @@ Menu
 {% endblock %}
 
 {% block content %}
+    <h2>{{restname}}</h2>
     {% for obj in menu_objects %}
-	<p><a href="/{{obj.id}}"><img src={{obj.image_url}}> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a></p>
+	<p><a><img src={{obj.image_url}}> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+        <a href="/addToCart/{{obj.food_Id}}">   Add to cart</a>
+    </p>
     {% endfor %}
+    
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/restaurants'" style="width:auto;">Back</button>
 {% endblock %}

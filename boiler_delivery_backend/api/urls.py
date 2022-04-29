@@ -15,7 +15,11 @@ urlpatterns = [
     re_path('restaurant/addFood/[0-9]+$', addFoodView),
     path('restaurant/addRestaurant', addRestaurantView),
 
-    re_path('menus/[0-9]+', getMenusView),
+    re_path('^menus/[0-9]+', getMenusView),
+    
+    re_path('^addToCart/[0-9]+', addCartView),
+    path('cart', getCartView),
+
     path('admin/', admin.site.urls),
     path('', include("django.contrib.auth.urls")),
     path('usersignup/', customerSignupView),

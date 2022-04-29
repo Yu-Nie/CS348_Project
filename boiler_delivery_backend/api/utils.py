@@ -45,7 +45,7 @@ def getCustomer(username):
 def getMenus(restaurant_id):
     menu = Food.objects.filter(restaurant_Id=restaurant_id)
     print("menu:", menu)
-    return menu[0] if menu else None
+    return menu
 
 
 # Creates a menu item for a restaurant. Default price is 0.
@@ -56,6 +56,12 @@ def createFood(name, restaurant_name, price=0.0, description=''):
     new_mi = Food.objects.create(name=name, price=price, description=description, restaurant=rest)
     return new_mi.id
 
+# Returns Food with given id
+def getFood(food_Id):
+    food_obj = Food.objects.filter(food_Id=food_Id)
+    if food_obj:
+        return food_obj[0]
+    return None
 
 # Returns all restaurants
 def getRestrants():

@@ -120,10 +120,13 @@ hr {
 
 {% if authenticated %}
 <button onclick="location.href = './addRestaurant'" style="width:auto;">Add Restaurant</button>
+<button onclick="location.href = './addFood'" style="width:auto;">Add Food</button>
+
 {% else %}
 <a>Please login to continue.<br></a>
 <button onclick="location.href = '/login'" style="width:auto;">Login</button>
 {% endif %}
+<button onclick="location.href = '/'" style="width:auto;">Home</button>
 
 </body>
 </html>
