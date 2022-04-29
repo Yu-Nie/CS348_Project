@@ -2,9 +2,10 @@ from django.urls import path, re_path
 from django.contrib import admin
 from .views import *
 
+
 urlpatterns = [
     path('', mainPageView),
-    path('customer', customerView),
+    path('customer', customerView, name = 'customer'),
     path('userlogin/', customerLoginView),
     path('usersignup/', customerSignupView),
     path('food/', getMenusView),

@@ -80,7 +80,7 @@ def customerSignupView(request):
                                         password=password, cart_Id=cart)
 
 
-            return HttpResponse("User Registered!")
+            return render(request, "usersignupsuccess.html")
         else:
             render(request, "usersignup.html", {"form":form})
     else:
