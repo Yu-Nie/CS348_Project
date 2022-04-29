@@ -66,6 +66,20 @@ def customerSignupView(request):
         form = SignupForm(new_post)
         if form.is_valid():
             form.save()
+
+            # adding to customer table / creating cart  ~ :D
+            first_name = new_post.get("first_name")
+            last_name = new_post.get("last_name")
+            email = new_post.get("email")
+            address = new_post.get("address")
+            password = new_post.get("password1")
+            cart = models.Cart(totalPrice=0.0)
+            cart.save()
+
+            models.Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
+                                        password=password, cart_Id=cart)
+
+
             return HttpResponse("User Registered!")
         else:
             render(request, "usersignup.html", {"form":form})
