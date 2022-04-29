@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 import json
 
 # Create your views here.
-from .utils import customerLogin
+from .utils import customerLogin, getMenus, getRestrants
 
 
 def test(request):
@@ -77,7 +77,6 @@ def getMenusView(request):
     menus_serialized = serializers.serialize("json", menus)
 
     return (HttpResponse(menus_serialized, content_type='application/json'))
-    # return(HttpResponse("just testing"))
 
 
 def getAllRestaurants(request):
