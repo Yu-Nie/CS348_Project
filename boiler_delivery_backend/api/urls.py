@@ -5,8 +5,8 @@ from .views import *
 urlpatterns = [
     path('', mainPageView),
     path('customer', customerView),
-    path('customer/login/', customerLoginView),
-    path('customer/signup/', customerSignupView),
+    path('userlogin/', customerLoginView),
+    path('usersignup/', customerSignupView),
     path('food/', getMenusView),
     path('restaurant/', restaurantView),
     path('restaurant/login', restaurantView),

@@ -26,19 +26,14 @@ def customerView(request):
 
 
 def customerLoginView(request, username=None, password=None):
-    print("login request received\n")
-    username = request.GET.get('username')
-    password = request.GET.get('password')
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("pwd")
+        models.Customer.objects.create(email=email, password=password)
 
-    if not username or not password:
-        login_success = False
-    else:
-        login_success = customerLogin(username, password)
+        return HttpResponse("log in successful!")
 
-    res = {
-        "success": login_success,
-    }
-    return (HttpResponse(json.dumps(res, cls=DjangoJSONEncoder), content_type='application/json'))
+    return render(request, "userlogin.html")
 
 
 def customerSignupView(request):
@@ -55,7 +50,7 @@ def customerSignupView(request):
 
         return HttpResponse("User Registered!")
 
-    return render(request, "signup.html")
+    return render(request, "usersignup.html")
 
 def restaurantView(request):
     return render(request, "restaurant.html")
