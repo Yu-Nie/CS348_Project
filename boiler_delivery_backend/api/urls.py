@@ -8,7 +8,9 @@ urlpatterns = [
     path('customer/login/', customerLoginView),
     path('customer/signup/', customerSignupView),
     path('food/', getMenusView),
-    path('restaurants/', restaurantView),
+    path('restaurant/', restaurantView),
+    path('restaurant/login', restaurantView),
+    path('restaurant/addRestaurant', addRestaurantView),
     path('admin/', admin.site.urls),
-    path('addRestaurant/', addRestaurantView),
+
 ]
