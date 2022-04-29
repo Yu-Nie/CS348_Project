@@ -24,6 +24,10 @@ def mainPageView(request):
 
 
 def customerView(request):
+    print(request.user)
+    print(request.user.username)
+    if request.user.is_anonymous:
+        print("not logged in")
     return render(request, "customer.html")
 
 
@@ -39,24 +43,6 @@ def customerLoginView(request, username=None, password=None):
 
 
 def customerSignupView(request):
-
-    """
-    if request.method == "POST":
-        first_name = request.POST.get("first")
-        last_name = request.POST.get("last")
-        email = request.POST.get("email")
-        address = request.POST.get("address")
-        password = request.POST.get("pwd")
-        cart = models.Cart(totalPrice=0.0)
-        cart.save()
-        models.Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
-                                       password=password, cart_Id=cart)
-
-        return HttpResponse("User Registered!")
-
-    return render(request, "usersignup.html")
-    """
-
 
     if request.method == "POST":
         new_post = request.POST.copy()
