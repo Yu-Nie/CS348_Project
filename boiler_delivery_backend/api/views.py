@@ -43,9 +43,20 @@ def customerSignupView(request):
             models.Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
                                            password=password, cart_Id = cart)
 
-            return HttpResponse("Sucess!!!")
+            return HttpResponse("User Registered!")
 
         return render(request, "signup.html")
+
+def addRestaurantView(request):
+    if request.method == "POST":
+        address = request.POST.get("address")
+        image_url = request.POST.get("image_url")
+        name = request.POST.get("name")
+        phone = request.POST.get("phone")
+        models.Restaurant.objects.create(address=address, image_url=image_url,name=name, phone=phone)
+
+        return HttpResponse("Restaurant Registered!")
+    return render(request, "addRestaurant.html")
 
 
 def getMenusView(request):

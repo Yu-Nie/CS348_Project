@@ -18,15 +18,15 @@ class Customer(models.Model):
 
 
 class Restaurant(models.Model):
-    restaurant_Id = models.IntegerField(primary_key=True, default=0)
-    address = models.TextField()
+    restaurant_Id = models.BigAutoField(primary_key=True)
+    address = models.TextField(default="N/A")
     image_url = models.TextField(default="N/A")
     name = models.CharField(max_length=255, null=False, blank=False)
     phone = models.BigIntegerField(null=False)
 
 
 class Food(models.Model):
-    food_Id = models.IntegerField(primary_key=True, default=0)
+    food_Id = models.BigAutoField(primary_key=True)
     description = models.TextField(null=False, blank=True)
     image_url = models.TextField(default="N/A")
     name = models.CharField(max_length=255, null=False, blank=False)

@@ -8,5 +8,6 @@ urlpatterns = [
     path('signup/', customerSignupView),
     path('food/', getMenusView),
     path('restaurants/', getAllRestaurants),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('addRestaurant/', addRestaurantView)
 ]
