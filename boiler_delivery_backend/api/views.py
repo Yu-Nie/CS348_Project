@@ -4,7 +4,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import redirect
-import json
+
+from .forms import SignupForm
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 from .utils import customerLogin, getMenus, getRestrants
@@ -37,6 +39,8 @@ def customerLoginView(request, username=None, password=None):
 
 
 def customerSignupView(request):
+
+    """
     if request.method == "POST":
         first_name = request.POST.get("first")
         last_name = request.POST.get("last")
@@ -51,6 +55,27 @@ def customerSignupView(request):
         return HttpResponse("User Registered!")
 
     return render(request, "usersignup.html")
+    """
+
+
+    if request.method == "POST":
+        print(request.POST)
+        updated_request = request.POST.copy()
+        updated_request.update({'username': updated_request['email']})
+
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("User Registered!")
+        else:
+            render(request, "usersignup.html", {"form":form})
+
+    else:
+        form = SignupForm()
+
+    return render(request, "usersignup.html", {"form":form})
+
+
 
 def restaurantView(request):
     return render(request, "restaurant.html")
