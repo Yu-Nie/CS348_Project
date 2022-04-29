@@ -59,17 +59,16 @@ def customerSignupView(request):
 
 
     if request.method == "POST":
-        print(request.POST)
-        updated_request = request.POST.copy()
-        updated_request.update({'username': updated_request['email']})
+        new_post = request.POST.copy()
+        new_post['email'] = new_post['username']
+        #print(new_post)
 
-        form = SignupForm(request.POST)
+        form = SignupForm(new_post)
         if form.is_valid():
             form.save()
             return HttpResponse("User Registered!")
         else:
             render(request, "usersignup.html", {"form":form})
-
     else:
         form = SignupForm()
 
