@@ -1,9 +1,9 @@
-import React from "react";
 import { Layout, Typography } from "antd";
 import { useState } from "react";
-import LoginForm from "./components/LoginForm";
 import FoodList from "./components/FoodList";
-// import SignupForm from "./components/SignupForm";
+import LoginForm from "./components/LoginForm";
+import MyCart from "./components/MyCart";
+import SignupForm from "./components/SignupForm";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -21,6 +21,7 @@ function App() {
           >
             Boiler Delivery
           </Title>
+          <div>{authed ? <MyCart /> : <SignupForm />}</div>
         </div>
       </Header>
       <Content
