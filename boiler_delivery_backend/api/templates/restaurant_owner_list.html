@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Restaurants
+{% endblock %}
+
+{% block content %}
+    {% for obj in objects %}
+    <!--
+        <img style="width:30%;" src={{obj.image_url}}>
+    -->
+    
+	<p><a> Name: {{obj.name}}, Address: {{obj.address}}, Phone Number: {{obj.phone}}</a>
+    <br>
+    <!--
+    <button style="width:30%;" onclick="location.href = '/restaurant/addFood/{{obj.restaurant_Id}}'" style="width:auto;">Select this restaurant</button>
+    -->
+    <button style="width:auto;" onclick="location.href = '/restaurant/addFood/{{obj.restaurant_Id}}'" style="width:auto;">Select this restaurant</button>
+
+    </p>
+    {% endfor %}
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/restaurant'" style="width:auto;">Back</button>
+{% endblock %}

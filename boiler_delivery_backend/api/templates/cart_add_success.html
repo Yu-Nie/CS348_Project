@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}
+Success
+{% endblock %}
+
+{% block content %}
+    <a> Your item is successfully added to the cart. </a><br>
+    <button onclick="location.href = '/cart'" style="width:auto;">View Cart</button>
+    <br>
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/menus/{{rest_id}}'" style="width:auto;">Back</button>
+{% endblock %}

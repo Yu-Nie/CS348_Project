@@ -37,7 +37,7 @@ class Food(models.Model):
 
 
 class OrderItem(models.Model):
-    item_Id = models.IntegerField(primary_key=True, default=0)
+    item_Id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255, null=False, blank=False, default="N/A")
     description = models.TextField(null=False, blank=True)
     price = models.FloatField(null=False)
