@@ -41,7 +41,6 @@ def successRedirectView(request):
     return render(request, "redirectMain.html", {"message": "Success!"})
 
 
-
 def customerSignupView(request):
     if request.method == "POST":
         new_post = request.POST.copy()
@@ -107,7 +106,7 @@ def addFoodSelectRestView(request):
         cust = getCustomer(request.user.username)
         rests = getRestrantsOwner(cust)
 
-        print(rests)
+        #print(rests)
         return render(request, "restaurant_owner_list.html", {"objects":rests})
         
     else:
