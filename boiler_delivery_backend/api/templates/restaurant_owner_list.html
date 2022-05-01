@@ -7,7 +7,11 @@ Restaurants
 
 {% block content %}
     {% for obj in objects %}
-	<p><a href="/restaurant/addFood/{{obj.restaurant_Id}}"><img src={{obj.image_url}}> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a></p>
+    <img style="width:30%;" src={{obj.image_url}}>
+	<p><a> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+    <br>
+    <button style="width:30%;" onclick="location.href = '/restaurant/addFood/{{obj.restaurant_Id}}'" style="width:auto;">Select this restaurant</button>
+    </p>
     {% endfor %}
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
     <button onclick="location.href = '/restaurant'" style="width:auto;">Back</button>

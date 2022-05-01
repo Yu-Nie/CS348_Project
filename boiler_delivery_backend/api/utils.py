@@ -72,6 +72,7 @@ def getRestrantsOwner(cust):
     rest_obj = Restaurant.objects.filter(owner=cust)
     return rest_obj
 
+
 # Returns restaurant with given id
 def getRestrant(rest_id):
     rest_obj = Restaurant.objects.filter(restaurant_Id=rest_id)

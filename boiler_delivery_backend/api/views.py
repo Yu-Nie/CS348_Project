@@ -37,6 +37,11 @@ def customerLoginView(request, username=None, password=None):
     return render(request, "userlogin.html")
 
 
+def successRedirectView(request):
+    return render(request, "redirectMain.html", {"message": "Success!"})
+
+
+
 def customerSignupView(request):
     if request.method == "POST":
         new_post = request.POST.copy()
@@ -60,7 +65,7 @@ def customerSignupView(request):
 
             form.save()
 
-            return render(request, "usersignupsuccess.html")
+            return render(request, "usersignup_success.html")
         else:
             render(request, "usersignup.html", {"form":form})
     else:
@@ -75,6 +80,8 @@ def restaurantView(request):
 
 
 def addRestaurantView(request):
+    print(request.user.is_authenticated)
+    print(request.user.username)
     if request.user.is_authenticated:
         if request.method == "POST":
             address = request.POST.get("address")
@@ -89,10 +96,10 @@ def addRestaurantView(request):
             
         else:
             form = AddRestaurantForm()
-            return render(request, "addRestaurant.html", {"form":form})
+            return render(request, "restaurant_add.html", {"form":form})
         
     else:
-        return render(request, "requestlogin.html")
+        return render(request, "login_request.html")
 
 
 def addFoodSelectRestView(request):
@@ -101,10 +108,10 @@ def addFoodSelectRestView(request):
         rests = getRestrantsOwner(cust)
 
         print(rests)
-        return render(request, "listownerrest.html", {"objects":rests})
+        return render(request, "restaurant_owner_list.html", {"objects":rests})
         
     else:
-        return render(request, "requestlogin.html")
+        return render(request, "login_request.html")
 
 
 def addFoodView(request):
@@ -125,17 +132,14 @@ def addFoodView(request):
 
             Food.objects.create(description=description, image_url=image_url, name=name, price=price, restaurant_Id=rest_object)
 
-            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood/\'\" style=\"width:auto;\">Back</button>")
+            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood\'\" style=\"width:auto;\">Back</button>")
             
         else:
             form = AddFoodForm()
-            return render(request, "addFood.html", {"form":form})
+            return render(request, "food_add.html", {"form":form})
         
     else:
-        return render(request, "requestlogin.html")
-
-
-
+        return render(request, "login_request.html")
 
 
 def getMenusView(request):
@@ -150,7 +154,7 @@ def getMenusView(request):
     menu = getMenus(rest_object)
     if not menu:
         return (HttpResponse("This restaurant has no food. <button onclick=\"location.href = \'/restaurants\'\" style=\"width:auto;\">Back</button>"))
-    return render(request, "showmenu.html", {"restname": rest_object.name, "menu_objects":menu})
+    return render(request, "menu_list.html", {"rest": rest_object, "menu_objects":menu})
 
 
 
@@ -163,18 +167,36 @@ def addCartView(request):
     fullpath = request.get_full_path()
     fullpath = fullpath.split('/')
 
-    food_id = int(fullpath[2])
+    food_id = int(fullpath[3])
     food_obj = getFood(food_id)
 
     cart_obj = getCart(getCustomer(request.user.username).email)
 
     ordered = OrderItem.objects.filter(food_Id=food_obj, cart_Id=cart_obj)
+    #print(ordered)
     if ordered:
         ordered[0].quantity += 1
+        ordered[0].save()
     else:
         OrderItem.objects.create(name=food_obj.name, description=food_obj.description, 
                                 price=food_obj.price, quantity=1, food_Id=food_obj, cart_Id=cart_obj)
-    return (HttpResponse("Added to Cart."))
+    
+    rest_id = int(fullpath[2])
+
+    return render(request, "cart_add_success.html", {"rest_id": rest_id})
+
+
+def clearCartView(request):
+    if request.user.is_authenticated:
+        cart_obj = getCart(request.user.username)
+        oi = getOrderItem(cart_obj)
+        if oi:
+            oi.delete()
+
+        return redirect("/cart/")
+
+    else:
+        return render(request, "login_request.html")
 
 
 def getCartView(request):
@@ -183,6 +205,5 @@ def getCartView(request):
         ordered = getOrderItem(cart)
         return render(request, "cart_list.html", {"ordered": ordered});
     else:
-        print("not logged in!")
-        return (HttpResponse("sup"))
+        return render(request, "login_request.html")
 
