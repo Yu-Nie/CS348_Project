@@ -36,3 +36,14 @@ class AddFoodForm(forms.ModelForm):
     class Meta:
         model = Food
         fields = ["name", "description", "price", "image_url"]
+
+class searchPriceForm(forms.Form):
+    lower = forms.IntegerField(label="Price Range Lower Bound")
+    upper = forms.IntegerField(label="Price Range Upper Bound")
+
+class searchNameForm(forms.Form):
+    name = forms.CharField(label="Food You want to find")
+
+class searchRestForm(forms.Form):
+    name = forms.CharField(label="Restaurant You want to find")
+

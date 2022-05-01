@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Add Food{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="POST" class="form-group">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="btn btn-success">Search Food</button>
+    </form>
+
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/customer'" style="width:auto;">Back</button>
+{% endblock %}

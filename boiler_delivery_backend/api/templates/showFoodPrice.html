@@ -1,0 +1,21 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+Food Within the Price Range
+{% endblock %}
+
+
+{% block content %}
+
+
+    {% for food in results %}
+    <p><a> Name: {{food.0}},   Price: {{food.1}}</a></p>
+    
+    {% endfor %}
+
+
+
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/customer/searchPrice'" style="width:auto;">Back</button>
+{% endblock %}

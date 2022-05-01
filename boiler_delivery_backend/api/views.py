@@ -3,13 +3,54 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import redirect
-
+from django.db import connection
 
 # Create your views here.
 from .utils import *
 from .models import *
 from .forms import *
 
+
+def searchFoodWithPriceView(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            lower = request.POST.get("lower")
+            upper = request.POST.get("upper")
+            cursor = connection.cursor()
+            cursor.execute("call sp_findFoodInRange(%s, %s)", [lower, upper])
+            results = cursor.fetchall()
+            cursor.close()
+            print(results)
+            return render(request, "showFoodPrice.html", {"results": results})
+        else:
+            form = searchPriceForm()
+            return render(request, "searchPrice.html", {"form":form})
+
+def searchFoodWithName(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            name = request.POST.get("name")
+            cursor = connection.cursor()
+            cursor.execute("call sp_findFoodWithName(%s)", [name])
+            results = cursor.fetchall()
+            cursor.close()
+            return render(request, "showFoodPrice.html", {"results": results})
+        else:
+            form = searchNameForm()
+            return render(request, "searchName.html", {"form":form})
+
+def searchRestaurant(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            name = request.POST.get("name")
+            cursor = connection.cursor()
+            cursor.execute("call findRestWithName(%s)", [name])
+            results = cursor.fetchall()
+            cursor.close()
+            return render(request, "showRest.html", {"results": results})
+        else:
+            form = searchRestForm()
+            return render(request, "searchRest.html", {"form":form})
 
 def test(request):
     # cust_id = signup("a", "b", "c", "d")
