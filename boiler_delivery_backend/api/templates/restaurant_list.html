@@ -5,13 +5,22 @@
 All Restaurants
 {% endblock %}
 
+
 {% block content %}
+
+
     {% for rest in restaurants %}
-	<p><a><img src={{rest.image_url}}> Name: {{rest.name}},   Address: {{rest.address}},  Phone Number: {{rest.phone}}</a>
-    <a href="/menus/{{rest.restaurant_Id}}"> Menu </a>
+    <img style="width:30%;" src={{rest.image_url}}>
+    <p><a> Name: {{rest.name}},   Address: {{rest.address}},  Phone Number: {{rest.phone}}</a>
+    <br>
+    <button style="width:30%;" onclick="location.href = '/menus/{{rest.restaurant_Id}}'" style="width:auto;">Menu</button>
+
     </p>
     
     {% endfor %}
+
+
+
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
     <button onclick="location.href = '/customer'" style="width:auto;">Back</button>
 {% endblock %}

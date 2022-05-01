@@ -37,6 +37,11 @@ def customerLoginView(request, username=None, password=None):
     return render(request, "userlogin.html")
 
 
+def successRedirectView(request):
+    return render(request, "redirectMain.html", {"message": "Success!"})
+
+
+
 def customerSignupView(request):
     if request.method == "POST":
         new_post = request.POST.copy()
@@ -75,6 +80,8 @@ def restaurantView(request):
 
 
 def addRestaurantView(request):
+    print(request.user.is_authenticated)
+    print(request.user.username)
     if request.user.is_authenticated:
         if request.method == "POST":
             address = request.POST.get("address")
@@ -125,7 +132,7 @@ def addFoodView(request):
 
             Food.objects.create(description=description, image_url=image_url, name=name, price=price, restaurant_Id=rest_object)
 
-            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood/\'\" style=\"width:auto;\">Back</button>")
+            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood\'\" style=\"width:auto;\">Back</button>")
             
         else:
             form = AddFoodForm()
@@ -169,8 +176,10 @@ def addCartView(request):
     cart_obj = getCart(getCustomer(request.user.username).email)
 
     ordered = OrderItem.objects.filter(food_Id=food_obj, cart_Id=cart_obj)
+    print(ordered)
     if ordered:
         ordered[0].quantity += 1
+        ordered[0].save()
     else:
         OrderItem.objects.create(name=food_obj.name, description=food_obj.description, 
                                 price=food_obj.price, quantity=1, food_Id=food_obj, cart_Id=cart_obj)

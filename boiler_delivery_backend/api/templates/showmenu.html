@@ -8,8 +8,10 @@ Menu
 {% block content %}
     <h2>{{restname}}</h2>
     {% for obj in menu_objects %}
-	<p><a><img src={{obj.image_url}}> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
-        <a href="/addToCart/{{obj.food_Id}}">   Add to cart</a>
+    <img style="width:30%;" src={{obj.image_url}}>
+	<p><a> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+        <br>
+        <button style="width:30%;" onclick="location.href = '/addToCart/{{obj.food_Id}}'" style="width:auto;">Add to cart</button>
     </p>
     {% endfor %}
     

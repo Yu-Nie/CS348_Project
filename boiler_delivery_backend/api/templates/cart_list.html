@@ -6,7 +6,7 @@ View
 
 {% block content %}
     {% for obj in ordered %}
-	<p><a>Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+	<p><a>Quantity: {{obj.quantity}} Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
     </p>
     {% endfor %}
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
