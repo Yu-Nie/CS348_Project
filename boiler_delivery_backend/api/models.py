@@ -19,10 +19,12 @@ class Customer(models.Model):
 
 class Restaurant(models.Model):
     restaurant_Id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=255, null=False, blank=False)
     address = models.TextField(default="N/A")
     image_url = models.TextField(default="N/A")
-    name = models.CharField(max_length=255, null=False, blank=False)
     phone = models.BigIntegerField(null=False)
+
+    owner = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
 class Food(models.Model):

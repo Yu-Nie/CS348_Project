@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     "corsheaders",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -176,3 +177,8 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"

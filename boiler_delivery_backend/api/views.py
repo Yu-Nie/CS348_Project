@@ -1,13 +1,14 @@
 from django.http import HttpResponse
-from . import models
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core import serializers
 from django.shortcuts import render
 from django.shortcuts import redirect
-import json
+
 
 # Create your views here.
-from .utils import customerLogin, getMenus, getRestrants
+from .utils import *
+from .models import *
+from .forms import *
 
 
 def test(request):
@@ -22,14 +23,14 @@ def mainPageView(request):
 
 
 def customerView(request):
-    return render(request, "customer.html")
+    return render(request, "customer.html", {"authenticated": request.user.is_authenticated })
 
 
 def customerLoginView(request, username=None, password=None):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("pwd")
-        models.Customer.objects.create(email=email, password=password)
+        Customer.objects.create(email=email, password=password)
 
         return HttpResponse("log in successful!")
 
@@ -38,33 +39,103 @@ def customerLoginView(request, username=None, password=None):
 
 def customerSignupView(request):
     if request.method == "POST":
-        first_name = request.POST.get("first")
-        last_name = request.POST.get("last")
-        email = request.POST.get("email")
-        address = request.POST.get("address")
-        password = request.POST.get("pwd")
-        cart = models.Cart(totalPrice=0.0)
-        cart.save()
-        models.Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
-                                       password=password, cart_Id=cart)
+        new_post = request.POST.copy()
+        new_post['email'] = new_post['username']
+        #print(new_post)
 
-        return HttpResponse("User Registered!")
+        form = SignupForm(new_post)
+        if form.is_valid():
 
-    return render(request, "usersignup.html")
+            # adding to customer table / creating cart  ~ :D
+            first_name = new_post.get("first_name")
+            last_name = new_post.get("last_name")
+            email = new_post.get("email")
+            address = new_post.get("address")
+            password = new_post.get("password1")
+            cart = Cart(totalPrice=0.0)
+            cart.save()
+
+            Customer.objects.create(email=email, firstName=first_name, lastName=last_name, address=address,
+                                        password=password, cart_Id=cart)
+
+            form.save()
+
+            return render(request, "usersignupsuccess.html")
+        else:
+            render(request, "usersignup.html", {"form":form})
+    else:
+        form = SignupForm()
+
+    return render(request, "usersignup.html", {"form":form})
+
+
 
 def restaurantView(request):
-    return render(request, "restaurant.html")
+    return render(request, "restaurant.html", {"authenticated": request.user.is_authenticated })
+
 
 def addRestaurantView(request):
-    if request.method == "POST":
-        address = request.POST.get("address")
-        image_url = request.POST.get("image_url")
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        models.Restaurant.objects.create(address=address, image_url=image_url, name=name, phone=phone)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            address = request.POST.get("address")
+            image_url = request.POST.get("image_url")
+            name = request.POST.get("name")
+            phone = request.POST.get("phone")
 
-        return HttpResponse("Restaurant Registered!")
-    return render(request, "addRestaurant.html")
+            cust_obj = getCustomer(request.user.username)
+            Restaurant.objects.create(address=address, image_url=image_url, name=name, phone=phone, owner=cust_obj)
+
+            return HttpResponse("Restaurant Registered!   <button onclick=\"location.href = \'/restaurant\'\" style=\"width:auto;\">Back</button>")
+            
+        else:
+            form = AddRestaurantForm()
+            return render(request, "addRestaurant.html", {"form":form})
+        
+    else:
+        return render(request, "requestlogin.html")
+
+
+def addFoodSelectRestView(request):
+    if request.user.is_authenticated:
+        cust = getCustomer(request.user.username)
+        rests = getRestrantsOwner(cust)
+
+        print(rests)
+        return render(request, "listownerrest.html", {"objects":rests})
+        
+    else:
+        return render(request, "requestlogin.html")
+
+
+def addFoodView(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            description = request.POST.get("description")
+            image_url = request.POST.get("image_url")
+            name = request.POST.get("name")
+            price = request.POST.get("price")
+            
+            fullpath = request.get_full_path()
+            fullpath = fullpath.split('/')
+            rest_id = int(fullpath[3])
+            rest_object = getRestrant(rest_id)
+
+            if rest_object.owner != getCustomer(request.user.username):
+                return render(request, "redirectMain.html", {"message": "This is not your restaurant."})
+
+            Food.objects.create(description=description, image_url=image_url, name=name, price=price, restaurant_Id=rest_object)
+
+            return HttpResponse("Food Added!  <button onclick=\"location.href = \'/restaurant/addFood/\'\" style=\"width:auto;\">Back</button>")
+            
+        else:
+            form = AddFoodForm()
+            return render(request, "addFood.html", {"form":form})
+        
+    else:
+        return render(request, "requestlogin.html")
+
+
+
 
 
 def getMenusView(request):
@@ -73,15 +144,45 @@ def getMenusView(request):
 
     rest_id = int(fullpath[2])
 
-    menus = getMenus(rest_id)
-    menus_serialized = serializers.serialize("json", menus)
+    rest_object = getRestrant(rest_id)
+    if not rest_object:
+        return (HttpResponse("no such restaurant.  <button onclick=\"location.href = \'/restaurants\'\" style=\"width:auto;\">Back</button>"))
+    menu = getMenus(rest_object)
+    if not menu:
+        return (HttpResponse("This restaurant has no food. <button onclick=\"location.href = \'/restaurants\'\" style=\"width:auto;\">Back</button>"))
+    return render(request, "showmenu.html", {"restname": rest_object.name, "menu_objects":menu})
 
-    return (HttpResponse(menus_serialized, content_type='application/json'))
 
 
 def getAllRestaurants(request):
-    all_rest = getRestrants()
-    all_rest_ser = serializers.serialize("json", all_rest)
-    # models.Cart.objects.getall()
-    return render(request, "restaurant_list.html");
+    return render(request, "restaurant_list.html", {"restaurants": getRestrants});
     # return (HttpResponse(all_rest_ser, content_type='application/json'))
+
+
+def addCartView(request):
+    fullpath = request.get_full_path()
+    fullpath = fullpath.split('/')
+
+    food_id = int(fullpath[2])
+    food_obj = getFood(food_id)
+
+    cart_obj = getCart(getCustomer(request.user.username).email)
+
+    ordered = OrderItem.objects.filter(food_Id=food_obj, cart_Id=cart_obj)
+    if ordered:
+        ordered[0].quantity += 1
+    else:
+        OrderItem.objects.create(name=food_obj.name, description=food_obj.description, 
+                                price=food_obj.price, quantity=1, food_Id=food_obj, cart_Id=cart_obj)
+    return (HttpResponse("Added to Cart."))
+
+
+def getCartView(request):
+    if request.user.is_authenticated:
+        cart = getCart(getCustomer(request.user.username).email)
+        ordered = getOrderItem(cart)
+        return render(request, "cart_list.html", {"ordered": ordered});
+    else:
+        print("not logged in!")
+        return (HttpResponse("sup"))
+
