@@ -7,8 +7,6 @@ urlpatterns = [
     path('', mainPageView, name = 'main'),
     path('customer', customerView, name = 'customer'),
 
-    path('cart/', getCartView),
-
     path('restaurants/', getAllRestaurants),
     path('restaurant/', restaurantView),
     re_path('restaurant/addFood$', addFoodSelectRestView),
@@ -17,8 +15,9 @@ urlpatterns = [
 
     re_path('^menus/[0-9]+', getMenusView),
     
-    re_path('^addToCart/[0-9]+', addCartView),
-    path('cart', getCartView),
+    re_path('^addToCart/[0-9]+/[0-9]+', addCartView),
+    path('cart/', getCartView),
+    path('clearCart/', clearCartView),
 
     path('admin/', admin.site.urls),
     path('', include("django.contrib.auth.urls")),

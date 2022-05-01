@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-View
+Cart
 {% endblock %}
 
 {% block content %}
@@ -9,6 +9,9 @@ View
 	<p><a>Quantity: {{obj.quantity}} Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
     </p>
     {% endfor %}
+    
+    <button onclick="location.href = '/clearCart/'" style="width:auto;">Remove All Items</button>
+    <br>
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
     <button onclick="location.href = '/customer'" style="width:auto;">Back</button>
 {% endblock %}
