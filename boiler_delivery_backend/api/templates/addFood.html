@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Add a Restaurant{% endblock %}
+{% block title %}Add Food{% endblock %}
 {% load crispy_forms_tags %}
 
 {% block content %}
     <form method="POST" class="form-group">
       {% csrf_token %}
       {{ form|crispy }}
-      <button type="submit" class="btn btn-success">Add Restaurant</button>
+      <button type="submit" class="btn btn-success">Add Food</button>
     </form>
 
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
