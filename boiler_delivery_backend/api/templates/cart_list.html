@@ -5,13 +5,20 @@ Cart
 {% endblock %}
 
 {% block content %}
+    <h2> Cart </h2>
     {% for obj in ordered %}
-	<p><a>Quantity: {{obj.quantity}} Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+	<p><a>Quantity: {{obj.quantity}} Name: {{obj.name}}, price: {{obj.price}}</a>
     </p>
     {% endfor %}
     
+    {% if ordered %}
+    <button onclick="location.href = '/checkout/'" style="width:auto;"> Checkout </button>
     <button onclick="location.href = '/clearCart/'" style="width:auto;">Remove All Items</button>
     <br>
+    {% else %}
+    <a> There is nothing in your cart now.</a> <br>
+    {% endif %}
+    
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
     <button onclick="location.href = '/customer'" style="width:auto;">Back</button>
 {% endblock %}

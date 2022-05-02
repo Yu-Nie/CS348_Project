@@ -9,7 +9,7 @@ Menu
     <h2>{{rest.name}}</h2>
     {% for obj in menu_objects %}
     <img style="width:30%;" src={{obj.image_url}}>
-	<p><a> Name: {{obj.name}}, price: {{obj.price}}, description: {{obj.description}}</a>
+	<p><a> Name: {{obj.name}}, price: {{obj.price}}<br>description: {{obj.description}}</a>
         <br>
         <button style="width:30%;" onclick="location.href = '/addToCart/{{rest.restaurant_Id}}/{{obj.food_Id}}'" style="width:auto;">Add to cart</button>
     </p>

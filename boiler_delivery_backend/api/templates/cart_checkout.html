@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Checkout
+{% endblock %}
+
+{% block content %}
+    <h2> Checkout </h2>
+    {% for obj in ordered %}
+	<p><a>Quantity: {{obj.quantity}} Name: {{obj.name}}, price: {{obj.price}}</a>
+    </p>
+    {% endfor %}
+    
+    <a> The total for your items is: {{price_sum}}</a> <br>
+    <a> Do you want to proceed? </a>
+    <br>
+    
+    <button onclick="location.href = '/purchased'" style="width:auto;">Yes</button>
+    <button onclick="location.href = '/cart'" style="width:auto;">No</button>
+
+    <br>
+
+    <button onclick="location.href = '/'" style="width:auto;">Home</button>
+    <button onclick="location.href = '/cart'" style="width:auto;">Back</button>
+{% endblock %}

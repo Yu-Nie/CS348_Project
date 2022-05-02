@@ -16,6 +16,8 @@ urlpatterns = [
     re_path('^addToCart/[0-9]+/[0-9]+', addCartView),
     path('cart/', getCartView),
     path('clearCart/', clearCartView),
+    path('checkout/', checkoutView),
+    path('purchased/', purchasedView),
     path('customer/searchRest', searchRestaurant),
     path('customer/searchPrice', searchFoodWithPriceView),
     path('customer/searchName', searchFoodWithName),

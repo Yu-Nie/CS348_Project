@@ -20,6 +20,9 @@ Restaurants
 
     </p>
     {% endfor %}
+    {% if not objects %}
+    <a> You have no restaurants </a><br>
+    {% endif %}
     <button onclick="location.href = '/'" style="width:auto;">Home</button>
     <button onclick="location.href = '/restaurant'" style="width:auto;">Back</button>
 {% endblock %}

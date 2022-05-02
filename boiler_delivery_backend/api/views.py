@@ -247,3 +247,28 @@ def getCartView(request):
     else:
         return render(request, "login_request.html")
 
+
+def checkoutView(request):
+    if request.user.is_authenticated:
+        cart = getCart(getCustomer(request.user.username).email)
+        ordered = getOrderItem(cart)
+
+        if not ordered:
+            redirect("/cart")
+
+        price_sum = sum(oi.price * oi.quantity for oi in ordered)
+        return render(request, "cart_checkout.html", {"ordered": ordered, "price_sum": price_sum});
+    else:
+        return render(request, "login_request.html")
+
+
+def purchasedView(request):
+    if request.user.is_authenticated:
+        cart = getCart(getCustomer(request.user.username).email)
+        ordered = getOrderItem(cart)
+        if ordered:
+            ordered.delete()
+
+        return render(request, "redirectMain.html", {"message": "Thank you for shopping with Boiler Delivery! Your order will be on the way."})
+    else:
+        return render(request, "login_request.html")
