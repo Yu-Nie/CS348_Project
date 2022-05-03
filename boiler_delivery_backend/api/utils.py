@@ -1,6 +1,3 @@
-from tkinter.messagebox import NO
-from scipy.fftpack import cs_diff
-from sympy import re
 from .models import *
 
 
