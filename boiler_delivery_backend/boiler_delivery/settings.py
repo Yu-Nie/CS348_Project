@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'boiler_delivery.wsgi.application'
 
-
+import psycopg2.extensions
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -88,6 +88,9 @@ DATABASES = {
         'HOST': 'egg-fried-rice.cgiajlg2cozl.us-east-2.rds.amazonaws.com',
         'PORT': '3306',
 
+    },
+    "OPTIONS": {
+        'isolation_level':psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ,
     }
 }
 
