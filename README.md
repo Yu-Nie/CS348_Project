@@ -1,6 +1,6 @@
 # CS348_Project: Boiler Delivery
 
-## Food delivery / grocery on campus.
+## Food delivery / grocery on campus, link to demo: https://youtu.be/PdPteWfKxHI.
 ## Main Feature:
 	User Register and Login
 	Pick food and add it to your cart
